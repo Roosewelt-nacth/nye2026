@@ -25,7 +25,7 @@
                 "The shadows of 2025 fade into the neon glow of a new dawn. We carry our history into the future."
             </p>
 
-            <a href="https://www.instagram.com/victorianyouthgroup" target="_blank" class="ig-btn">
+            <a href="https://www.instagram.com/victorians.youth/" target="_blank" class="ig-btn">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ig-logo">
                     <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
                     <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
@@ -37,13 +37,27 @@
     </section>
 
     <section id="celebration-page" class="hidden">
-        <div class="content-wrapper">
-            <h1 class="welcome-title">HELLO 2026</h1>
-            <div class="verse-card">
-                <p id="verse-display"></p>
-                <p id="ref-display"></p>
+        <div class="overlay-glow"></div>
+        
+        <div class="content-wrapper celebration-content">
+            <div class="badge">A New Chapter Begins</div>
+            
+            <h1 class="welcome-title main-reveal">
+                Happy New Year<br>
+                <span class="year-glow">2026</span>
+            </h1>
+            
+            <div class="verse-container">
+                <div class="glass-card">
+                    <div class="card-accent"></div>
+                    <p id="verse-display" class="verse-text"></p>
+                    <p id="ref-display" class="verse-ref"></p>
+                </div>
             </div>
-            <button class="retry-btn" onclick="location.reload()">✨ Another Blessing ✨</button>
+            
+            <button class="retry-btn pulse-animation" onclick="location.reload()">
+                <span class="btn-icon">✨</span> Receive Another Blessing
+            </button>
         </div>
     </section>
 
