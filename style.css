@@ -529,3 +529,59 @@ body {
     transform: scale(1.05);
     transition: all 1s ease-in-out;
 }
+
+/* 1. Text Smoothness */
+.verse-text, .verse-ref {
+    transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+}
+
+.text-changing {
+    opacity: 0;
+    transform: translateY(10px);
+    filter: blur(4px);
+}
+
+/* 2. Glass Card "Shimmer" Animation */
+.glass-card {
+    position: relative;
+    overflow: hidden; /* Clips the shimmer sweep */
+}
+
+.glass-card.card-active {
+    animation: cardPop 0.6s ease-out;
+}
+
+/* The Golden Sweep Effect */
+.glass-card::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -150%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg, 
+        transparent, 
+        rgba(255, 204, 51, 0.2), 
+        transparent
+    );
+    transform: skewX(-20deg);
+}
+
+.glass-card.card-active::after {
+    animation: shimmerSweep 0.8s ease-in-out;
+}
+
+@keyframes cardPop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.03); border-color: var(--gold); }
+    100% { transform: scale(1); }
+}
+
+@keyframes shimmerSweep {
+    0% { left: -150%; }
+    100% { left: 150%; }
+}

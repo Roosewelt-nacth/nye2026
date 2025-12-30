@@ -318,31 +318,33 @@ function launchCelebrationFX() {
         if (Date.now() < end) requestAnimationFrame(frame);
     }());
 }
-
 function getNewBlessing() {
     const verseElement = document.getElementById('verse-display');
     const refElement = document.getElementById('ref-display');
     const glassCard = document.querySelector('.glass-card');
 
-    // 1. Add a "flicker" effect to the card for feedback
-    glassCard.style.animation = 'none';
-    void glassCard.offsetWidth; // Trigger reflow
-    glassCard.style.animation = 'cardPop 0.5s ease';
+    // 1. Add the "Shimmer" and "Pop" effect to the card
+    glassCard.classList.remove('card-active');
+    void glassCard.offsetWidth; // Force reflow
+    glassCard.classList.add('card-active');
 
     // 2. Select a new random verse
     const random = bibleVerses[Math.floor(Math.random() * bibleVerses.length)];
 
-    // 3. Update text with a quick fade-out/in
-    verseElement.style.opacity = 0;
-    refElement.style.opacity = 0;
+    // 3. Smooth Text Transition
+    // We add a class that handles the blur and slight downward slide
+    verseElement.classList.add('text-changing');
+    refElement.classList.add('text-changing');
 
     setTimeout(() => {
         verseElement.innerText = `"${random.text}"`;
         refElement.innerText = `- ${random.ref}`;
-        verseElement.style.opacity = 1;
-        refElement.style.opacity = 1;
-    }, 200);
+        
+        // Remove the transition class to trigger the "slide up and clear" effect
+        verseElement.classList.remove('text-changing');
+        refElement.classList.remove('text-changing');
+    }, 300); // Swaps text while the card is at its brightest
 
-    // 4. Relaunch the Cracker Burst (Celebration!)
+    // 4. Relaunch the Cracker Burst
     launchCelebrationFX(); 
 }
