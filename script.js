@@ -101,7 +101,7 @@ const bibleVerses = [
     { text: "Be devoted to one another in love. Honor one another above yourselves.", ref: "Romans 12:10" }
 ];
 
-const TARGET_DATE = '2025-12-30T18:55:00+05:30'; //''2025-12-31T23:59:00+00:00'';
+const TARGET_DATE = '2025-12-30T22:20:00+05:30'; //''2025-12-31T23:59:00+00:00'';
 const targetTime = new Date(TARGET_DATE).getTime();
 
 let wakeLock = null;
