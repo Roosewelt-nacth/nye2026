@@ -9,73 +9,83 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 </head>
 <body>
-    <div class="gradient-bg"></div>
-
-    <section id="start-page">
-        <div class="content-wrapper">
-            <div class="logo-container">
-                <img src="logo.png" alt="Victorian Youth Logo" class="main-logo">
-            </div>
-
-            <div id="countdown-wrapper">
-                <p class="timer-label">TIME UNTIL THE NEW DAWN</p>
-                <div id="countdown-timer">00:00:00</div>
-            </div>
-
-            <button class="goodbye-btn" id="transition-trigger">
-                <span class="emoji-wave">👋</span> Goodbye 2025
-            </button>
-            
-            <div id="custom-alert" class="modal-overlay hidden">
-                <div class="modal-card">
-                    <div class="modal-glow"></div>
-                    <div class="modal-icon">⏳</div>
-                    <h2 class="modal-title">Patience, Victorian</h2>
-                    <p id="modal-message" class="modal-text"></p>
-                    <button class="modal-close-btn" onclick="closeModal()">Return to 2025</button>
-                </div>
-            </div>
-
-            <p class="quote-text">
-                "The shadows of 2025 fade into the neon glow of a new dawn. We carry our history into the future."
-            </p>
-
-            <a href="https://www.instagram.com/victorians.youth/" target="_blank" class="ig-btn">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ig-logo">
-                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-                </svg>
-                Follow us on Instagram
-            </a>
+    <div id="intro-overlay">
+        <div class="title-glitch">
+            <div class="title__inner"></div>
         </div>
-    </section>
+    </div>
 
-    <section id="celebration-page" class="hidden">
-        <div class="overlay-glow"></div>
-        
-        <div class="content-wrapper celebration-content">
-            <div class="badge">A New Chapter Begins</div>
-            
-            <h1 class="welcome-title main-reveal">
-                Happy New Year<br>
-                <span class="year-glow">2026</span>
-            </h1>
-            
-            <div class="verse-container">
-                <div class="glass-card">
-                    <div class="card-accent"></div>
-                    <p id="verse-display" class="verse-text"></p>
-                    <p id="ref-display" class="verse-ref"></p>
+    <div id="main-content" class="initial-hide">
+        <div class="gradient-bg"></div>
+        <div class="nebula-layer"></div>
+        <div class="stars-distant"></div>
+        <div class="parallax-orb orb-1"></div>
+        <div class="parallax-orb orb-2"></div>
+
+        <section id="start-page">
+            <div class="content-wrapper">
+                <div class="logo-container reveal-item">
+                    <img src="logo.png" alt="Victorian Youth Logo" class="main-logo">
                 </div>
-            </div>
-            
-            <button class="retry-btn pulse-animation" onclick="getNewBlessing()">
-                <span class="btn-icon">✨</span> Receive Another Blessing
-            </button>
-        </div>
-    </section>
 
+                <div id="countdown-wrapper" class="reveal-item">
+                    <p class="timer-label">TIME UNTIL THE NEW DAWN</p>
+                    <div id="countdown-timer">00:00:00</div>
+                </div>
+
+                <button class="goodbye-btn reveal-item" id="transition-trigger">
+                    <span class="emoji-wave">👋</span> Goodbye 2025
+                </button>
+                
+                <div id="custom-alert" class="modal-overlay hidden">
+                    <div class="modal-card">
+                        <div class="modal-glow"></div>
+                        <div class="modal-icon">⏳</div>
+                        <h2 class="modal-title">Patience, Victorian</h2>
+                        <p id="modal-message" class="modal-text"></p>
+                        <button class="modal-close-btn" onclick="closeModal()">Return to 2025</button>
+                    </div>
+                </div>
+
+                <p class="quote-text reveal-item">
+                    "The shadows of 2025 fade into the neon glow of a new dawn. We carry our history into the future."
+                </p>
+
+                <a href="https://www.instagram.com/victorians.youth/" target="_blank" class="ig-btn reveal-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E1306C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ig-logo">
+                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                    </svg>
+                    Follow us on Instagram
+                </a>
+            </div>
+        </section>
+
+        <section id="celebration-page" class="hidden">
+            <div class="overlay-glow"></div>
+            <div class="content-wrapper celebration-content">
+                <div class="badge">A New Chapter Begins</div>
+                
+                <h1 class="welcome-title main-reveal">
+                    Happy New Year<br>
+                    <span class="year-glow">2026</span>
+                </h1>
+                
+                <div class="verse-container">
+                    <div class="glass-card">
+                        <div class="card-accent"></div>
+                        <p id="verse-display" class="verse-text"></p>
+                        <p id="ref-display" class="verse-ref"></p>
+                    </div>
+                </div>
+                
+                <button class="retry-btn pulse-animation" onclick="getNewBlessing()">
+                    <span class="btn-icon">✨</span> Receive Another Blessing
+                </button>
+            </div>
+        </section>
+    </div>
     <script src="script.js"></script>
 </body>
 </html>

@@ -105,6 +105,48 @@ const TARGET_DATE = '2025-12-30T18:55:00+05:30'; //''2025-12-31T23:59:00+00:00''
 const targetTime = new Date(TARGET_DATE).getTime();
 
 let wakeLock = null;
+window.addEventListener('load', () => {
+    const intro = document.getElementById('intro-overlay');
+    const mainContent = document.getElementById('main-content');
+    const revealItems = document.querySelectorAll('.reveal-item');
+
+    setTimeout(() => {
+        intro.style.filter = 'blur(10px)';
+        intro.style.transform = 'scale(1.1)';
+        intro.style.opacity = '0';
+        
+        setTimeout(() => {
+            intro.style.display = 'none';
+            mainContent.classList.add('show-content');
+
+            revealItems.forEach((item, index) => {
+                setTimeout(() => {
+                    item.classList.add('reveal-active');
+                }, 400 + (index * 200));
+            });
+        }, 800);
+    }, 3000); 
+});
+
+window.addEventListener('load', () => {
+    const items = document.querySelectorAll('.reveal-item');
+    
+    items.forEach((item, index) => {
+        setTimeout(() => {
+            item.classList.add('reveal-active');
+        }, 300 + (index * 200)); 
+    });
+    
+    setTimeout(() => {
+        confetti({
+            particleCount: 40,
+            spread: 60,
+            origin: { y: 0.8 },
+            colors: ['#8a2be2', '#00d4ff'],
+            disableForReducedMotion: true
+        });
+    }, 1500);
+});
 
 // Function to request the Wake Lock
 const requestWakeLock = async () => {
