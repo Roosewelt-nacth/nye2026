@@ -101,8 +101,41 @@ const bibleVerses = [
     { text: "Be devoted to one another in love. Honor one another above yourselves.", ref: "Romans 12:10" }
 ];
 
-const TARGET_DATE = '2025-12-30T18:40:00+05:30'; //''2025-12-31T23:59:00+00:00'';
+const TARGET_DATE = '2025-12-30T18:55:00+05:30'; //''2025-12-31T23:59:00+00:00'';
 const targetTime = new Date(TARGET_DATE).getTime();
+
+let wakeLock = null;
+
+// Function to request the Wake Lock
+const requestWakeLock = async () => {
+    try {
+        // Check if the browser supports Wake Lock
+        if ('wakeLock' in navigator) {
+            wakeLock = await navigator.wakeLock.request('screen');
+            
+            // Listen for when the lock is released (e.g., if user switches tabs)
+            wakeLock.addEventListener('release', () => {
+                console.log('Victorian Telegraph: Wake Lock was released');
+            });
+            
+            console.log('Victorian Telegraph: Screen is now LOCKED ON');
+        }
+    } catch (err) {
+        console.error(`${err.name}, ${err.message}`);
+    }
+};
+
+// Handle visibility change (If user minimizes Chrome and comes back)
+const handleVisibilityChange = async () => {
+    if (wakeLock !== null && document.visibilityState === 'visible') {
+        await requestWakeLock();
+    }
+};
+
+document.addEventListener('visibilitychange', handleVisibilityChange);
+
+// Request lock when they click the first button
+document.getElementById('transition-trigger').addEventListener('click', requestWakeLock);
 
 // Function to trigger the local push via the Service Worker
 function sendLocalPush() {
