@@ -100,51 +100,171 @@ const bibleVerses = [
     { text: "Therefore encourage one another and build each other up.", ref: "1 Thessalonians 5:11" },
     { text: "Be devoted to one another in love. Honor one another above yourselves.", ref: "Romans 12:10" }
 ];
+
+const TARGET_DATE = '2025-12-30T17:59:00+05:30'; //''2025-12-31T23:59:00+00:00'';
+const targetTime = new Date(TARGET_DATE).getTime();
+
+window.addEventListener('load', () => {
+    if ("Notification" in window) {
+        Notification.requestPermission().then(permission => {
+            console.log("Notification permission:", permission);
+            if (permission === "granted") {
+                new Notification("System Ready", { body: "You will be notified 1 min before 2026!" });
+            }
+        });
+    }
+});
+
+let notificationSent = false; // Prevents the notification from firing multiple times
+
+function sendReadyNotification() {
+    if (Notification.permission === "granted") {
+        const options = {
+            body: "The New Dawn is 60 seconds away! Get your device ready.",
+            icon: "logo.png", // Use your Victorian logo
+            vibrate: [200, 100, 200], // Vibration pattern for mobile
+            silent: false
+        };
+        
+        new Notification("🎩 Victorian Youth: 2026", options);
+        
+        // Tactile feedback if the tab is currently open
+        if (navigator.vibrate) {
+            navigator.vibrate([500, 200, 500]);
+        }
+    }
+}
+
+const updateTimer = () => {
+    const now = new Date().getTime();
+    const distance = targetTime - now;
+
+    const timerWrapper = document.getElementById('countdown-wrapper');
+    const timerDisplay = document.getElementById('countdown-timer');
+    const triggerBtn = document.getElementById('transition-trigger');
+
+    if (distance <= 60000 && distance > 0 && !notificationSent) {
+        sendReadyNotification(); // Try the push
+        
+        // Fallback: Immediate visual and tactile alert on the page
+        if (navigator.vibrate) navigator.vibrate([500, 110, 500]);
+        
+        // Show the custom modal we built earlier as a backup
+        showModal("⚠️ GET READY! 1 Minute remains until the New Dawn!");
+        
+        notificationSent = true;
+    }
+
+    if (distance <= 10000 && distance > 0) {
+        timerDisplay.style.color = "var(--gold)";
+        timerDisplay.style.fontSize = "3.5rem"; // Make it grow!
+        timerDisplay.style.transition = "all 0.3s ease";
+    }
+
+    if (distance <= 0) {
+        if (timerWrapper) timerWrapper.innerHTML = "<p class='timer-label'>THE DAWN IS HERE</p>";
+        if (triggerBtn) {
+            triggerBtn.style.background = "var(--gold)";
+            triggerBtn.innerHTML = "✨ Enter 2026";
+        }
+        return;
+    }
+
+    const hours = Math.floor(distance / (1000 * 60 * 60));
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+    const format = (num) => num.toString().padStart(2, '0');
+    
+    if (timerDisplay) {
+        timerDisplay.innerText = `${format(hours)}:${format(minutes)}:${format(seconds)}`;
+        if (distance < 600000) timerDisplay.classList.add('pulse-timer');
+    }
+};
+
+setInterval(updateTimer, 1000);
+updateTimer();
+
+function showModal(message) {
+    const modal = document.getElementById('custom-alert');
+    const msgPara = document.getElementById('modal-message');
+    if (modal && msgPara) {
+        msgPara.innerText = message;
+        modal.classList.remove('hidden');
+    }
+}
+
+function closeModal() {
+    const modal = document.getElementById('custom-alert');
+    if (modal) modal.classList.add('hidden');
+}
+
 document.getElementById('transition-trigger').addEventListener('click', function() {
+    const now = new Date().getTime();
+
+    if (now < targetTime) {
+        const distance = targetTime - now;
+        const hrs = Math.floor(distance / (1000 * 60 * 60));
+        const mins = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        
+        const timeString = hrs > 0 ? `${hrs} hour(s) and ${mins} minute(s)` : `${mins} minute(s)`;
+        
+        showModal(`Patience, Victorian! The new dawn is not yet here. Please wait ${timeString} more.`);
+        
+        this.classList.add('locked-shake');
+        setTimeout(() => this.classList.remove('locked-shake'), 500);
+        return;
+    }
+
     document.getElementById('start-page').classList.add('hidden');
-    const celebPage = document.getElementById('celebration-page');
-    celebPage.classList.remove('hidden');
+    document.getElementById('celebration-page').classList.remove('hidden');
 
     const random = bibleVerses[Math.floor(Math.random() * bibleVerses.length)];
     document.getElementById('verse-display').innerText = `"${random.text}"`;
     document.getElementById('ref-display').innerText = `- ${random.ref}`;
 
-    // --- REALISTIC CRACKER BURST ---
-    // Using gold, orange, and white for a "fire" look
-    const crackerColors = ['#ffcc33', '#ffae42', '#ffffff', '#ff4500'];
+    const startSleigh = () => {
+        const sleigh = document.createElement('img');
+        sleigh.src = 'deer.png'; // Ensure hdeer.png is in your folder
+        sleigh.className = 'sleigh-animation';
+        const randomTop = Math.floor(Math.random() * 30) + 10;
+        sleigh.style.top = `${randomTop}%`;
+        document.body.appendChild(sleigh);
+        setTimeout(() => sleigh.remove(), 12000);
+    };
+    startSleigh();
+    setInterval(startSleigh, 15000);
 
-    // Initial Central Explosion
+    launchCelebrationFX();
+});
+
+function launchCelebrationFX() {
+    const crackerColors = ['#ffcc33', '#ffae42', '#ffffff', '#ff4500'];
+    
     confetti({
         particleCount: 200,
         spread: 120,
         origin: { y: 0.6 },
         colors: crackerColors,
-        shapes: ['circle', 'star'], // Only sparks, NO squares (paper)
-        scalar: 0.8,                // Small, sharp spark size
-        ticks: 250,                 // Particles vanish after 250 ticks
-        gravity: 1.2,               // Faster fall like real sparks
-        drift: 0,
-        opacity: 0.9
+        shapes: ['circle', 'star'],
+        scalar: 0.8,
+        ticks: 250,
+        gravity: 1.2
     });
 
-    // Sustained Glitter Sparks (Background Crackers)
-    const end = Date.now() + 5 * 1000;
+    const end = Date.now() + 10 * 1000;
     (function frame() {
         confetti({
-            particleCount: 3,
-            angle: Math.random() * 360,
-            spread: 60,
+            particleCount: 1,
+            startVelocity: 0,
             origin: { x: Math.random(), y: Math.random() - 0.2 },
-            colors: crackerColors,
+            colors: ['#ffffff'],
             shapes: ['circle'],
-            scalar: 0.4,            // Tiny glimmers
-            alpha: 0.3,             // High transparency for background shimmer
-            ticks: 100,
-            gravity: 0.8
+            scalar: 0.5,
+            gravity: 0.3,
+            drift: Math.sin(Date.now() / 1000)
         });
 
-        if (Date.now() < end) {
-            requestAnimationFrame(frame);
-        }
+        if (Date.now() < end) requestAnimationFrame(frame);
     }());
-});
+}

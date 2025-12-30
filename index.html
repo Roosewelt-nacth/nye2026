@@ -17,10 +17,25 @@
                 <img src="logo.png" alt="Victorian Youth Logo" class="main-logo">
             </div>
 
+            <div id="countdown-wrapper">
+                <p class="timer-label">TIME UNTIL THE NEW DAWN</p>
+                <div id="countdown-timer">00:00:00</div>
+            </div>
+
             <button class="goodbye-btn" id="transition-trigger">
                 <span class="emoji-wave">👋</span> Goodbye 2025
             </button>
             
+            <div id="custom-alert" class="modal-overlay hidden">
+                <div class="modal-card">
+                    <div class="modal-glow"></div>
+                    <div class="modal-icon">⏳</div>
+                    <h2 class="modal-title">Patience, Victorian</h2>
+                    <p id="modal-message" class="modal-text"></p>
+                    <button class="modal-close-btn" onclick="closeModal()">Return to 2025</button>
+                </div>
+            </div>
+
             <p class="quote-text">
                 "The shadows of 2025 fade into the neon glow of a new dawn. We carry our history into the future."
             </p>
