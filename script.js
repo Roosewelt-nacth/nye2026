@@ -101,19 +101,8 @@ const bibleVerses = [
     { text: "Be devoted to one another in love. Honor one another above yourselves.", ref: "Romans 12:10" }
 ];
 
-const TARGET_DATE = '2025-12-30T18:20:00+05:30'; //''2025-12-31T23:59:00+00:00'';
+const TARGET_DATE = '2025-12-30T18:40:00+05:30'; //''2025-12-31T23:59:00+00:00'';
 const targetTime = new Date(TARGET_DATE).getTime();
-
-// Register Service Worker
-if ('serviceWorker' in navigator && 'PushManager' in window) {
-    navigator.serviceWorker.register('sw.js')
-    .then(function(swReg) {
-        console.log('Service Worker is registered', swReg);
-    })
-    .catch(function(error) {
-        console.error('Service Worker Error', error);
-    });
-}
 
 // Function to trigger the local push via the Service Worker
 function sendLocalPush() {
@@ -129,81 +118,84 @@ function sendLocalPush() {
     }
 }
 
+// 1. Better Service Worker Registration
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js').then(reg => {
+        console.log('Telegraph Service Worker Active');
+    });
+}
+
+// 2. Optimized Permission Request
 window.addEventListener('load', () => {
     if ("Notification" in window) {
         Notification.requestPermission().then(permission => {
-            console.log("Notification permission:", permission);
             if (permission === "granted") {
-                new Notification("System Ready", { body: "You will be notified 1 min before 2026!" });
+                // We send a test via Service Worker to ensure background capability
+                navigator.serviceWorker.ready.then(reg => {
+                    reg.showNotification("🎩 Victorian Youth", {
+                        body: "Telegraph Linked! You will be notified 1 min before the New Dawn.",
+                        icon: "logo.png"
+                    });
+                });
             }
         });
     }
 });
 
-let notificationSent = false; // Prevents the notification from firing multiple times
+let notificationSent = false;
 
+// 3. BACKGROUND-READY NOTIFICATION
 function sendReadyNotification() {
-    if (Notification.permission === "granted") {
-        const options = {
-            body: "The New Dawn is 60 seconds away! Get your device ready.",
-            icon: "logo.png", // Use your Victorian logo
-            vibrate: [200, 100, 200], // Vibration pattern for mobile
-            silent: false
-        };
-        
-        new Notification("🎩 Victorian Youth: 2026", options);
-        
-        // Tactile feedback if the tab is currently open
-        if (navigator.vibrate) {
-            navigator.vibrate([500, 200, 500]);
-        }
+    if (Notification.permission === "granted" && 'serviceWorker' in navigator) {
+        navigator.serviceWorker.ready.then(registration => {
+            // This is the specific call that reaches the LOCK SCREEN
+            registration.showNotification("🎩 Victorian Youth: 2026", {
+                body: "The New Dawn is 60 seconds away! Get your device ready.",
+                icon: "logo.png",
+                badge: "logo.png",
+                vibrate: [500, 110, 500], // Stronger vibration for pocket alert
+                tag: "nye-reminder",
+                requireInteraction: true, // Notification stays until user dismisses it
+                renotify: true
+            });
+        });
     }
 }
 
 const updateTimer = () => {
     const now = new Date().getTime();
     const distance = targetTime - now;
-
-    const timerWrapper = document.getElementById('countdown-wrapper');
     const timerDisplay = document.getElementById('countdown-timer');
-    const triggerBtn = document.getElementById('transition-trigger');
 
+    // Trigger notification at the 1-minute mark
     if (distance <= 60000 && distance > 0 && !notificationSent) {
-        sendReadyNotification(); // Try the push
-        
-        // Fallback: Immediate visual and tactile alert on the page
-        if (navigator.vibrate) navigator.vibrate([500, 110, 500]);
-        
-        // Show the custom modal we built earlier as a backup
+        sendReadyNotification();
         showModal("⚠️ GET READY! 1 Minute remains until the New Dawn!");
-        
         notificationSent = true;
     }
 
+    // Timer UI updates...
     if (distance <= 10000 && distance > 0) {
         timerDisplay.style.color = "var(--gold)";
-        timerDisplay.style.fontSize = "3.5rem"; // Make it grow!
+        timerDisplay.style.fontSize = "3.5rem";
         timerDisplay.style.transition = "all 0.3s ease";
     }
 
     if (distance <= 0) {
-        if (timerWrapper) timerWrapper.innerHTML = "<p class='timer-label'>THE DAWN IS HERE</p>";
-        if (triggerBtn) {
-            triggerBtn.style.background = "var(--gold)";
-            triggerBtn.innerHTML = "✨ Enter 2026";
-        }
+        document.getElementById('countdown-wrapper').innerHTML = "<p class='timer-label'>THE DAWN IS HERE</p>";
+        const triggerBtn = document.getElementById('transition-trigger');
+        triggerBtn.style.background = "var(--gold)";
+        triggerBtn.innerHTML = "✨ Enter 2026";
         return;
     }
 
     const hours = Math.floor(distance / (1000 * 60 * 60));
     const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
     const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
     const format = (num) => num.toString().padStart(2, '0');
     
     if (timerDisplay) {
         timerDisplay.innerText = `${format(hours)}:${format(minutes)}:${format(seconds)}`;
-        if (distance < 600000) timerDisplay.classList.add('pulse-timer');
     }
 };
 
