@@ -318,3 +318,31 @@ function launchCelebrationFX() {
         if (Date.now() < end) requestAnimationFrame(frame);
     }());
 }
+
+function getNewBlessing() {
+    const verseElement = document.getElementById('verse-display');
+    const refElement = document.getElementById('ref-display');
+    const glassCard = document.querySelector('.glass-card');
+
+    // 1. Add a "flicker" effect to the card for feedback
+    glassCard.style.animation = 'none';
+    void glassCard.offsetWidth; // Trigger reflow
+    glassCard.style.animation = 'cardPop 0.5s ease';
+
+    // 2. Select a new random verse
+    const random = bibleVerses[Math.floor(Math.random() * bibleVerses.length)];
+
+    // 3. Update text with a quick fade-out/in
+    verseElement.style.opacity = 0;
+    refElement.style.opacity = 0;
+
+    setTimeout(() => {
+        verseElement.innerText = `"${random.text}"`;
+        refElement.innerText = `- ${random.ref}`;
+        verseElement.style.opacity = 1;
+        refElement.style.opacity = 1;
+    }, 200);
+
+    // 4. Relaunch the Cracker Burst (Celebration!)
+    launchCelebrationFX(); 
+}
