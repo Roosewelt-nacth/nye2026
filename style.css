@@ -1,0 +1,179 @@
+:root {
+    --bg-dark: #05050a;
+    --gold: #ffcc33;
+    --vibrant-purple: #8a2be2;
+    --vibrant-blue: #00d4ff;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-dark);
+    color: var(--white);
+    font-family: 'EB Garamond', serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow: hidden;
+}
+
+.content-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 90%;
+    max-width: 500px;
+    animation: fadeIn 1s ease;
+}
+
+/* Moving Background Gradient */
+.gradient-bg {
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    background: linear-gradient(45deg, #05050a, #1a0a2e, #0a1a2e);
+    background-size: 400% 400%;
+    animation: gradientMove 15s ease infinite;
+    z-index: -1;
+}
+
+@keyframes gradientMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Logo Styling */
+.main-logo {
+    width: 120px;
+    height: auto;
+    filter: drop-shadow(0 0 10px var(--gold));
+    margin-bottom: 20px;
+}
+
+/* Desktop/Base Style */
+.goodbye-btn {
+    background: white;
+    color: black;
+    border: 3px solid black;
+    padding: 20px 60px;
+    font-size: 2rem;
+    font-family: sans-serif;
+    font-weight: bold;
+    border-radius: 100px;
+    cursor: pointer;
+    margin-bottom: 30px;
+    display: flex;
+    flex-wrap: nowrap; /* Prevents text from wrapping weirdly */
+    align-items: center;
+    gap: 15px;
+    max-width: 90%; /* Safety net */
+    transition: transform 0.5s ease-in-out, box-shadow 0.5s ease-in-out;
+}
+
+/* --- MOBILE RESPONSIVE FIX --- */
+@media (max-width: 480px) {
+    .goodbye-btn {
+        padding: 15px 30px; /* Reduced padding */
+        font-size: 1.4rem;   /* Smaller, readable font */
+        gap: 10px;           /* Tighter spacing for the emoji */
+        width: 85%;          /* Ensures it stays within screen bounds */
+        justify-content: center; /* Centers text if width is forced */
+    }
+}
+
+.goodbye-btn:hover {
+    transform: scale(1.1) rotate(-2deg);
+    box-shadow: 0 0 50px var(--vibrant-blue);
+}
+
+/* Instagram Button Enhancement */
+.ig-btn {
+    margin-top: 30px;
+    color: white;
+    text-decoration: none;
+    font-size: 0.9rem;
+    border: 1px solid rgba(255,255,255,0.3);
+    padding: 12px 24px;
+    border-radius: 30px;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(8px);
+    
+    /* Layout Logic */
+    display: inline-flex;
+    align-items: center;
+    gap: 10px; /* Space between logo and text */
+    
+    /* Smooth hover effect */
+    transition: all 0.4s ease;
+}
+
+.ig-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: #E1306C; /* Instagram Pink */
+    box-shadow: 0 0 15px rgba(225, 48, 108, 0.4);
+    transform: translateY(-3px);
+}
+
+.ig-logo {
+    color: white; /* You can change this to #E1306C for a pop of color */
+}
+
+/* Ensure it doesn't look weird on mobile */
+@media (max-width: 480px) {
+    .ig-btn {
+        font-size: 0.8rem;
+        padding: 10px 18px;
+    }
+}
+
+.quote-text {
+    color: var(--gold);
+    font-style: italic;
+    font-size: 1.2rem;
+    line-height: 1.6;
+    text-align: center;
+}
+
+/* Page 2 Styles - Matches your Image 2 */
+.welcome-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 4rem;
+    color: var(--gold);
+    margin: 0 0 20px 0;
+    line-height: 1;
+}
+
+.verse-card {
+    background: #1c1c1e;
+    border: 1px solid #3a3a3c;
+    border-radius: 20px;
+    padding: 40px;
+    margin-bottom: 20px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    width: 100%;
+}
+
+#verse-display { font-size: 1.5rem; line-height: 1.4; margin-bottom: 15px; }
+#ref-display { color: var(--gold); font-weight: bold; font-size: 1.2rem; }
+
+.retry-btn {
+    background: #e5e5e7;
+    color: black;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    width: 200px;
+}
+
+.hidden { display: none !important; }
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Mobile Support */
+@media (max-width: 600px) {
+    .welcome-title { font-size: 3rem; }
+    .goodbye-btn { font-size: 1.5rem; padding: 15px 40px; }
+}
