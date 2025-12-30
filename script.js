@@ -101,8 +101,33 @@ const bibleVerses = [
     { text: "Be devoted to one another in love. Honor one another above yourselves.", ref: "Romans 12:10" }
 ];
 
-const TARGET_DATE = '2025-12-30T17:59:00+05:30'; //''2025-12-31T23:59:00+00:00'';
+const TARGET_DATE = '2025-12-30T18:12:00+05:30'; //''2025-12-31T23:59:00+00:00'';
 const targetTime = new Date(TARGET_DATE).getTime();
+
+// Register Service Worker
+if ('serviceWorker' in navigator && 'PushManager' in window) {
+    navigator.serviceWorker.register('sw.js')
+    .then(function(swReg) {
+        console.log('Service Worker is registered', swReg);
+    })
+    .catch(function(error) {
+        console.error('Service Worker Error', error);
+    });
+}
+
+// Function to trigger the local push via the Service Worker
+function sendLocalPush() {
+    if (Notification.permission === 'granted') {
+        navigator.serviceWorker.ready.then(function(registration) {
+            registration.showNotification('🎩 Victorian Youth: 2026', {
+                body: 'The New Dawn is 60 seconds away! Get your device ready.',
+                icon: 'logo.png',
+                vibrate: [200, 100, 200],
+                tag: 'nye-reminder' // Prevents duplicate notifications
+            });
+        });
+    }
+}
 
 window.addEventListener('load', () => {
     if ("Notification" in window) {
