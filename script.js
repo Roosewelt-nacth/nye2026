@@ -104,6 +104,32 @@ const bibleVerses = [
 const TARGET_DATE = '2025-12-31T23:59:00+00:00';
 const targetTime = new Date(TARGET_DATE).getTime();
 
+// Floating Parallax Effect
+document.addEventListener('mousemove', (e) => {
+    const timer = document.getElementById('countdown-timer');
+    if (!timer) return;
+
+    // Calculate mouse position relative to center
+    const x = (window.innerWidth / 2 - e.pageX) / 30;
+    const y = (window.innerHeight / 2 - e.pageY) / 30;
+
+    // Apply a subtle tilt and shift
+    timer.style.transform = `rotateY(${x}deg) rotateX(${-y}deg) translateZ(20px)`;
+});
+
+// Mobile Gyroscope Version (Natural Tilt)
+if (window.DeviceOrientationEvent) {
+    window.addEventListener('deviceorientation', (e) => {
+        const timer = document.getElementById('countdown-timer');
+        if (!timer) return;
+
+        const tiltX = e.gamma / 3; // Left-to-right
+        const tiltY = (e.beta - 45) / 3; // Front-to-back
+
+        timer.style.transform = `rotateY(${tiltX}deg) rotateX(${-tiltY}deg)`;
+    });
+}
+
 let wakeLock = null;
 window.addEventListener('load', () => {
     const intro = document.getElementById('intro-overlay');
