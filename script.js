@@ -104,6 +104,53 @@ const bibleVerses = [
 const TARGET_DATE = '2025-12-31T23:59:00+00:00';
 const targetTime = new Date(TARGET_DATE).getTime();
 
+/* Add this to your script.js */
+
+function initGyroscope() {
+    // Check if the browser supports Device Orientation
+    if (window.DeviceOrientationEvent) {
+        window.addEventListener('deviceorientation', (event) => {
+            const timer = document.getElementById('countdown-timer');
+            if (!timer) return;
+
+            // 1. Get tilt values
+            // Gamma: Left to Right tilt (-90 to 90)
+            // Beta: Front to Back tilt (-180 to 180)
+            let tiltX = event.gamma; 
+            let tiltY = event.beta;
+
+            // 2. Limit the rotation so it doesn't flip over (Subtle effect is cooler)
+            const maxRotation = 25; 
+            let rY = Math.max(Math.min(tiltX, maxRotation), -maxRotation);
+            let rX = Math.max(Math.min(tiltY - 45, maxRotation), -maxRotation); // -45 assumes user holds phone at an angle
+
+            // 3. Apply the 3D Transform
+            // translateZ(50px) makes the text look like it's floating ABOVE the glass
+            timer.style.transform = `rotateY(${rY}deg) rotateX(${-rX}deg) translateZ(30px)`;
+        });
+    }
+}
+
+// iPhone specific: iOS requires permission for motion sensors since iOS 13
+async function requestGyroPermission() {
+    if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+        try {
+            const response = await DeviceOrientationEvent.requestPermission();
+            if (response === 'granted') {
+                initGyroscope();
+            }
+        } catch (error) {
+            console.error("Gyroscope permission denied", error);
+        }
+    } else {
+        // Android or older iOS
+        initGyroscope();
+    }
+}
+
+// Trigger this when the user first interacts with the "Goodbye 2025" button
+document.getElementById('transition-trigger').addEventListener('click', requestGyroPermission);
+
 // Floating Parallax Effect
 document.addEventListener('mousemove', (e) => {
     const timer = document.getElementById('countdown-timer');
